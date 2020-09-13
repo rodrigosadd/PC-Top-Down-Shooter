@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class PlayerController : Ship
 {
-    public Rigidbody2D rbody;
+    public Rigidbody2D rBodyPlayer;
 
     private Vector2 _mousePosition;
     private Vector2 _lookAtdirection;
     private Vector2 _moveDirection;
     private float _distanceBetween;
 
+    public static PlayerController playerInstance;
+
     void Start()
     {
+        playerInstance = this;
         currentLife = maxLife;
     }
 
@@ -37,14 +40,14 @@ public class PlayerController : Ship
 
         _lookAtdirection = new Vector2(_mousePosition.x - transform.position.x, _mousePosition.y - transform.position.y);
         float _angle = Mathf.Atan2(_lookAtdirection.y, _lookAtdirection.x) * Mathf.Rad2Deg + 90;
-        rbody.rotation = _angle;
+        rBodyPlayer.rotation = _angle;
     }
 
     public void InputMovement()
     {
         _distanceBetween = Vector2.Distance(_mousePosition, transform.position);
 
-        if (Input.GetKey(KeyCode.W) && _distanceBetween >= 0.1f)
+        if (Input.GetKey(KeyCode.W) && _distanceBetween >= 0.5f)
         {
             Movement();
         }
