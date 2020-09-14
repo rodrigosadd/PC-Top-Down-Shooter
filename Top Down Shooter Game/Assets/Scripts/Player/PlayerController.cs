@@ -4,28 +4,29 @@ using UnityEngine;
 
 public class PlayerController : Ship
 {
+    [Header("Rigidbody variable")]
     public Rigidbody2D rBodyPlayer;
+
+    [Header("Shot variables")]
+    public Transform[] shotPoints;
+    public GameObject bulletPrefab;
+    public float timeBtwShots;
+    public float startTimeBtwShots;
 
     private Vector2 _mousePosition;
     private Vector2 _lookAtdirection;
     private Vector2 _moveDirection;
     private float _distanceBetween;
 
-    public static PlayerController playerInstance;
-
     void Start()
     {
-        playerInstance = this;
         currentLife = maxLife;
     }
 
     void Update()
     {
         InputMovement();
-    }
-
-    void FixedUpdate()
-    {
+        Shooting();
         LookAtMouse();
     }
 
@@ -68,6 +69,45 @@ public class PlayerController : Ship
             currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
 
             transform.Translate(_moveDirection * currentSpeed * Time.deltaTime);
+        }
+    }
+
+    public void Shooting()
+    {
+        if (timeBtwShots <= 0)
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                FrontalShoot();
+                timeBtwShots = startTimeBtwShots;
+            }
+            else if (Input.GetButtonDown("Fire2"))
+            {
+                SideShoot();
+                timeBtwShots = startTimeBtwShots;
+            }
+        }
+        else
+        {
+            timeBtwShots -= Time.deltaTime;
+        }
+    }
+
+    public void FrontalShoot()
+    {
+        Bullet _bullet = GameInstances.instance.poolSystemInstance.TryToGetBullet();
+        _bullet.transform.position = shotPoints[0].position;
+        _bullet.rBodyBullet.velocity = shotPoints[0].up * -1 * _bullet.speed;
+        _bullet.currentShooter = transform;
+    }
+    public void SideShoot()
+    {
+        for (int index = 1; index != shotPoints.Length; index++)
+        {
+            Bullet _bullet = GameInstances.instance.poolSystemInstance.TryToGetBullet();
+            _bullet.transform.position = shotPoints[index].position;
+            _bullet.rBodyBullet.velocity = shotPoints[index].up * _bullet.speed;
+            _bullet.currentShooter = transform;
         }
     }
 }

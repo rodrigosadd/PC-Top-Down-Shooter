@@ -15,6 +15,10 @@ public abstract class Ship : MonoBehaviour
     public float maxSpeed;
     public float acceleration;
 
+    [Header("Bullet variables")]
+    public GameObject impactEffect;
+    public int damage;
+
     public void TakeDamage(int amountDamege)
     {
         currentLife -= amountDamege;
@@ -23,5 +27,15 @@ public abstract class Ship : MonoBehaviour
         {
             state = ShipState.DEAD;
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D hitInfo)
+    {
+        if (hitInfo.transform.tag == "Bullet")
+        {
+            TakeDamage(damage);
+        }
+        GameObject _bulletImpact = Instantiate(impactEffect, transform.position, transform.rotation);
+        Destroy(_bulletImpact);
     }
 }

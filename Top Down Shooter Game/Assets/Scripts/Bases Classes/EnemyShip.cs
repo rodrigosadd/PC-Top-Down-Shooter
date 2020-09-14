@@ -15,11 +15,11 @@ public abstract class EnemyShip : Ship
 
     public void EnemyFollowPLayer()
     {
-        _distanceBetween = Vector2.Distance(transform.position, PlayerController.playerInstance.transform.position);
+        _distanceBetween = Vector2.Distance(transform.position, GameInstances.GetPlayer().transform.position);
 
         if (_distanceBetween > stoppingDistance)
         {
-            transform.position = Vector2.MoveTowards(transform.position, PlayerController.playerInstance.transform.position, Acceleration() * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, GameInstances.GetPlayer().transform.position, Acceleration() * Time.deltaTime);
         }
         else
         {
@@ -30,7 +30,7 @@ public abstract class EnemyShip : Ship
 
     public void LookAtPlayer()
     {
-        _lookAtdirection = new Vector2(PlayerController.playerInstance.transform.position.x - transform.position.x, PlayerController.playerInstance.transform.position.y - transform.position.y);
+        _lookAtdirection = new Vector2(GameInstances.GetPlayer().transform.position.x - transform.position.x, GameInstances.GetPlayer().transform.position.y - transform.position.y);
         float _angle = Mathf.Atan2(_lookAtdirection.y, _lookAtdirection.x) * Mathf.Rad2Deg + 90;
         rBodyEnemy.rotation = _angle;
     }
