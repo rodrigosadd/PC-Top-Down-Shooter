@@ -11,11 +11,13 @@ public class ChaserEnemy : EnemyShip
 
     void Start()
     {
-        currentLife = maxLife;
+        SetMaxLife();
     }
 
     void Update()
     {
+        SetShipGraphics();
+        Dead();
         EnemyFollowPLayer();
     }
 
@@ -29,9 +31,10 @@ public class ChaserEnemy : EnemyShip
     {
         _distanceBetween = Vector2.Distance(transform.position, GameInstances.GetPlayer().transform.position);
 
-        if (_distanceBetween <= stoppingDistance)
+        if (_distanceBetween <= stoppingDistance && state != ShipState.DISABLED && GameInstances.GetPlayer().state != ShipState.DISABLED)
         {
             GameInstances.GetPlayer().TakeDamage(amountDamage);
+            TakeDamage(maxLife);
         }
     }
 }

@@ -20,11 +20,13 @@ public class PlayerController : Ship
 
     void Start()
     {
-        currentLife = maxLife;
+        SetMaxLife();
     }
 
     void Update()
     {
+        SetShipGraphics();
+        Dead();
         InputMovement();
         Shooting();
         LookAtMouse();
@@ -37,18 +39,20 @@ public class PlayerController : Ship
 
     public void LookAtMouse()
     {
-        SetMousePosition();
-
-        _lookAtdirection = new Vector2(_mousePosition.x - transform.position.x, _mousePosition.y - transform.position.y);
-        float _angle = Mathf.Atan2(_lookAtdirection.y, _lookAtdirection.x) * Mathf.Rad2Deg + 90;
-        rBodyPlayer.rotation = _angle;
+        if (state != ShipState.DISABLED)
+        {
+            SetMousePosition();
+            _lookAtdirection = new Vector2(_mousePosition.x - transform.position.x, _mousePosition.y - transform.position.y);
+            float _angle = Mathf.Atan2(_lookAtdirection.y, _lookAtdirection.x) * Mathf.Rad2Deg + 90;
+            rBodyPlayer.rotation = _angle;
+        }
     }
 
     public void InputMovement()
     {
         _distanceBetween = Vector2.Distance(_mousePosition, transform.position);
 
-        if (Input.GetKey(KeyCode.W) && _distanceBetween >= 0.5f)
+        if (Input.GetKey(KeyCode.W) && _distanceBetween >= 0.5f && state != ShipState.DISABLED)
         {
             Movement();
         }
@@ -76,12 +80,12 @@ public class PlayerController : Ship
     {
         if (timeBtwShots <= 0)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") && state != ShipState.DISABLED)
             {
                 FrontalShoot();
                 timeBtwShots = startTimeBtwShots;
             }
-            else if (Input.GetButtonDown("Fire2"))
+            else if (Input.GetButtonDown("Fire2") && state != ShipState.DISABLED)
             {
                 SideShoot();
                 timeBtwShots = startTimeBtwShots;

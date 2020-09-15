@@ -15,11 +15,13 @@ public class ShooterEnemy : EnemyShip
 
     void Start()
     {
-        currentLife = maxLife;
+        SetMaxLife();
     }
 
     void Update()
     {
+        SetShipGraphics();
+        Dead();
         EnemyFollowPLayer();
         EnemyShooting();
     }
@@ -33,7 +35,7 @@ public class ShooterEnemy : EnemyShip
     {
         _distanceBetween = Vector2.Distance(transform.position, GameInstances.GetPlayer().transform.position);
 
-        if (_distanceBetween < distanceToShoot)
+        if (_distanceBetween < distanceToShoot && state != ShipState.DISABLED && GameInstances.GetPlayer().state != ShipState.DISABLED)
         {
             if (timeBtwShots <= 0)
             {

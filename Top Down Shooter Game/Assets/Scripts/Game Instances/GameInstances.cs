@@ -10,8 +10,8 @@ public class GameInstances : MonoBehaviour
     [Header("Pool Instance")]
     public PoolSystem poolSystemInstance;
 
-    [Header("Hud controller Instance")]
-    public HudController hudControllerInstance;
+    [Header("UI Manager Instance")]
+    public UiManager uiManagerInstance;
 
     [Header("Enemys Instances")]
     public List<ShooterEnemy> listShootEnemys;

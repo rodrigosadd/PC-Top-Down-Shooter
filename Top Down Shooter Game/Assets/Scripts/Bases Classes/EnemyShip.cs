@@ -17,7 +17,7 @@ public abstract class EnemyShip : Ship
     {
         _distanceBetween = Vector2.Distance(transform.position, GameInstances.GetPlayer().transform.position);
 
-        if (_distanceBetween > stoppingDistance)
+        if (_distanceBetween > stoppingDistance && state != ShipState.DISABLED && GameInstances.GetPlayer().state != ShipState.DISABLED)
         {
             transform.position = Vector2.MoveTowards(transform.position, GameInstances.GetPlayer().transform.position, Acceleration() * Time.deltaTime);
         }
@@ -30,9 +30,12 @@ public abstract class EnemyShip : Ship
 
     public void LookAtPlayer()
     {
-        _lookAtdirection = new Vector2(GameInstances.GetPlayer().transform.position.x - transform.position.x, GameInstances.GetPlayer().transform.position.y - transform.position.y);
-        float _angle = Mathf.Atan2(_lookAtdirection.y, _lookAtdirection.x) * Mathf.Rad2Deg + 90;
-        rBodyEnemy.rotation = _angle;
+        if (state != ShipState.DISABLED)
+        {
+            _lookAtdirection = new Vector2(GameInstances.GetPlayer().transform.position.x - transform.position.x, GameInstances.GetPlayer().transform.position.y - transform.position.y);
+            float _angle = Mathf.Atan2(_lookAtdirection.y, _lookAtdirection.x) * Mathf.Rad2Deg + 90;
+            rBodyEnemy.rotation = _angle;
+        }
     }
 
     public float Acceleration()
