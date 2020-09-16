@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UiManager : MonoBehaviour
 {
+    [Header("Life bar variables")]
     public List<LifeBarInfo> listLifeBarInfo;
     public Transform canvas;
     public Camera cam;
     public Vector2 offset;
+
+    [Header("Score points variables")]
+    public TextMeshProUGUI scorePointsText;
+
+    [Header("Wave countdown variables")]
+    public GameObject waveCountdown;
 
     void Update()
     {
@@ -16,6 +24,7 @@ public class UiManager : MonoBehaviour
         SetLife();
         SetLifeBarPosition();
         DisableLifeBar();
+        SetScorePoints();
     }
 
     public void SetLife()
@@ -36,9 +45,9 @@ public class UiManager : MonoBehaviour
             listLifeBarInfo.Add(_lifeBar);
         }
 
-        for (int i = 0; i < GameInstances.instance.listShootEnemys.Count; i++)
+        for (int i = 0; i < GameInstances.instance.listShooterEnemies.Count; i++)
         {
-            EnemyShip enemyIndex = GameInstances.instance.listShootEnemys[i];
+            EnemyShip enemyIndex = GameInstances.instance.listShooterEnemies[i];
             if (!HasLifeBar(enemyIndex))
             {
                 LifeBarInfo _lifeBar = GameInstances.instance.poolSystemInstance.TryToGetLifeBar();
@@ -47,9 +56,9 @@ public class UiManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < GameInstances.instance.listChaserEnemys.Count; i++)
+        for (int i = 0; i < GameInstances.instance.listChaserEnemies.Count; i++)
         {
-            EnemyShip enemyIndex = GameInstances.instance.listChaserEnemys[i];
+            EnemyShip enemyIndex = GameInstances.instance.listChaserEnemies[i];
             if (!HasLifeBar(enemyIndex))
             {
                 LifeBarInfo _lifeBar = GameInstances.instance.poolSystemInstance.TryToGetLifeBar();
@@ -91,5 +100,10 @@ public class UiManager : MonoBehaviour
                 i--;
             }
         }
+    }
+
+    public void SetScorePoints()
+    {
+        scorePointsText.text = GameInstances.GetPlayer().amountPoints.ToString();
     }
 }

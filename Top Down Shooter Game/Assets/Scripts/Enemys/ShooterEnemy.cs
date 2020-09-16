@@ -13,8 +13,9 @@ public class ShooterEnemy : EnemyShip
 
     private float _distanceBetween;
 
-    void Start()
+    void OnEnable()
     {
+        state = ShipState.NORMAL;
         SetMaxLife();
     }
 

@@ -50,7 +50,7 @@ MonoBehaviour:
   rBodyBullet: {fileID: -1468937129932767446}
   currentShooter: {fileID: 0}
   maxDistanceBtwShooter: 20
-  speed: 20
+  speed: 15
 --- !u!212 &616384501177703456
 SpriteRenderer:
   m_ObjectHideFlags: 0

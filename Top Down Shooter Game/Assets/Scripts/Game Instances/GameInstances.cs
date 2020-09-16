@@ -14,8 +14,8 @@ public class GameInstances : MonoBehaviour
     public UiManager uiManagerInstance;
 
     [Header("Enemys Instances")]
-    public List<ShooterEnemy> listShootEnemys;
-    public List<ChaserEnemy> listChaserEnemys;
+    public List<ShooterEnemy> listShooterEnemies;
+    public List<ChaserEnemy> listChaserEnemies;
 
     public static GameInstances instance;
 
@@ -27,5 +27,28 @@ public class GameInstances : MonoBehaviour
     public static PlayerController GetPlayer()
     {
         return instance.playerInstance;
+    }
+
+    public void CheckEnemiesDisabled()
+    {
+        for (int i = 0; i < listShooterEnemies.Count; i++)
+        {
+            ShooterEnemy _shooterEnemy = listShooterEnemies[i];
+            if (!_shooterEnemy.gameObject.activeSelf)
+            {
+                listShooterEnemies.RemoveAt(i);
+                i--;
+            }
+        }
+
+        for (int i = 0; i < listChaserEnemies.Count; i++)
+        {
+            ChaserEnemy _chaserEnemy = listChaserEnemies[i];
+            if (!_chaserEnemy.gameObject.activeSelf)
+            {
+                listChaserEnemies.RemoveAt(i);
+                i--;
+            }
+        }
     }
 }

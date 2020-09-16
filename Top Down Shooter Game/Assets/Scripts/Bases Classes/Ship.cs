@@ -45,7 +45,19 @@ public abstract class Ship : MonoBehaviour
 
     public void SetShipGraphics()
     {
-        if (currentLife <= 60 && currentLife > 20)
+        if (currentLife > 60)
+        {
+            for (int i = 0; i < destroyedSpriteRender.Length; i++)
+            {
+                destroyedSpriteRender[i].color = Color.white;
+            }
+
+            shipGraphics[0].gameObject.SetActive(true);
+            shipGraphics[1].gameObject.SetActive(false);
+            shipGraphics[2].gameObject.SetActive(false);
+            shipGraphics[3].gameObject.SetActive(false);
+        }
+        else if (currentLife <= 60 && currentLife > 20)
         {
             shipGraphics[0].gameObject.SetActive(false);
             shipGraphics[1].gameObject.SetActive(true);
@@ -75,15 +87,32 @@ public abstract class Ship : MonoBehaviour
             acceleration = 0;
             colliderShip.enabled = false;
             state = ShipState.DISABLED;
+
+            if (GameInstances.GetPlayer().state != ShipState.DISABLED)
+            {
+                GameInstances.GetPlayer().amountPoints += amountPoints;
+            }
         }
         else if (state == ShipState.DISABLED)
         {
-            for (int i = 0; i < destroyedSpriteRender.Length; i++)
-            {
-                Color _colorRender = destroyedSpriteRender[i].color;
-                _colorRender.a -= 0.5f * Time.deltaTime;
-                destroyedSpriteRender[i].color = _colorRender;
-            }
+            DestroySpriteRender();
+            StartCoroutine(DisableShip());
+        }
+    }
+
+    public IEnumerator DisableShip()
+    {
+        yield return new WaitForSeconds(2f);
+        gameObject.SetActive(false);
+    }
+
+    public void DestroySpriteRender()
+    {
+        for (int i = 0; i < destroyedSpriteRender.Length; i++)
+        {
+            Color _colorRender = destroyedSpriteRender[i].color;
+            _colorRender.a -= 0.5f * Time.deltaTime;
+            destroyedSpriteRender[i].color = _colorRender;
         }
     }
 

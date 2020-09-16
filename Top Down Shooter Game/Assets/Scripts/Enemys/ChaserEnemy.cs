@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class ChaserEnemy : EnemyShip
 {
-    [Header("Damage variable")]
-    public int amountDamage;
-
     private float _distanceBetween;
 
-    void Start()
+    void OnEnable()
     {
+        state = ShipState.NORMAL;
         SetMaxLife();
     }
 
@@ -33,7 +31,7 @@ public class ChaserEnemy : EnemyShip
 
         if (_distanceBetween <= stoppingDistance && state != ShipState.DISABLED && GameInstances.GetPlayer().state != ShipState.DISABLED)
         {
-            GameInstances.GetPlayer().TakeDamage(amountDamage);
+            GameInstances.GetPlayer().TakeDamage(maxLife);
             TakeDamage(maxLife);
         }
     }

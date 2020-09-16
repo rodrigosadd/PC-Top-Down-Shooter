@@ -16,12 +16,24 @@ public class PoolSystem : MonoBehaviour
 
     [Header("Life bar Pool variables")]
     public List<LifeBarInfo> listLifeBarPool;
-    public LifeBarInfo LifeBarPrefab;
+    public LifeBarInfo lifeBarPrefab;
     public int initialAmountLifeBars;
+    public GameObject lifeBarHolder;
+
+    [Header("Enemy Shooter variables")]
+    public List<ShooterEnemy> listEnemyShooterPool;
+    public ShooterEnemy enemyShooterPrefab;
+    public int initialAmountShooter;
+
+    [Header("Enemy Chaser variables")]
+    public List<ChaserEnemy> listEnemyChaserPool;
+    public ChaserEnemy enemyChaserPrefab;
+    public int initialAmountChaser;
 
     private GameObject _bulletsHolder;
     private GameObject _bulletsImpactsHolder;
-    private GameObject _LifeBarHolder;
+    private GameObject _enemyShooterHolder;
+    private GameObject _enemyChaserHolder;
 
     void Start()
     {
@@ -50,14 +62,31 @@ public class PoolSystem : MonoBehaviour
             listBulletImpactPool.Add(_bulletImpact);
         }
 
-        _LifeBarHolder = new GameObject("Life bar Pool");
-        _LifeBarHolder.transform.parent = GameInstances.instance.uiManagerInstance.canvas;
-        _LifeBarHolder.transform.localScale = Vector2.one;
+        lifeBarHolder.transform.parent = GameInstances.instance.uiManagerInstance.canvas;
+        lifeBarHolder.transform.localScale = Vector2.one;
         for (int index = 0; index <= initialAmountLifeBars; index++)
         {
-            LifeBarInfo _LifeBar = Instantiate(LifeBarPrefab, _LifeBarHolder.transform);
-            _LifeBar.gameObject.SetActive(false);
-            listLifeBarPool.Add(_LifeBar);
+            LifeBarInfo _lifeBar = Instantiate(lifeBarPrefab, lifeBarHolder.transform);
+            _lifeBar.gameObject.SetActive(false);
+            listLifeBarPool.Add(_lifeBar);
+        }
+
+        _enemyShooterHolder = new GameObject("Enemy Shooter Pool");
+        _enemyShooterHolder.transform.position = Vector2.zero;
+        for (int index = 0; index <= initialAmountShooter; index++)
+        {
+            ShooterEnemy _enemyShooter = Instantiate(enemyShooterPrefab, _enemyShooterHolder.transform);
+            _enemyShooter.gameObject.SetActive(false);
+            listEnemyShooterPool.Add(_enemyShooter);
+        }
+
+        _enemyChaserHolder = new GameObject("Enemy Chaser Pool");
+        _enemyChaserHolder.transform.position = Vector2.zero;
+        for (int index = 0; index <= initialAmountChaser; index++)
+        {
+            ChaserEnemy _enemyChaser = Instantiate(enemyChaserPrefab, _enemyChaserHolder.transform);
+            _enemyChaser.gameObject.SetActive(false);
+            listEnemyChaserPool.Add(_enemyChaser);
         }
     }
 
@@ -129,9 +158,61 @@ public class PoolSystem : MonoBehaviour
 
         if (_toReturn == null)
         {
-            _toReturn = Instantiate(LifeBarPrefab);
-            _toReturn.transform.SetParent(_LifeBarHolder.transform);
+            _toReturn = Instantiate(lifeBarPrefab);
+            _toReturn.transform.SetParent(lifeBarHolder.transform);
             listLifeBarPool.Add(_toReturn);
+        }
+
+        _toReturn.gameObject.SetActive(true);
+
+        return _toReturn;
+    }
+
+    public ShooterEnemy TryToGetEnemyShooter()
+    {
+        ShooterEnemy _toReturn = null;
+
+        for (int index = 0; index < listEnemyShooterPool.Count; index++)
+        {
+            ShooterEnemy _possibleEnemyShooter = listEnemyShooterPool[index];
+            if (!_possibleEnemyShooter.gameObject.activeSelf)
+            {
+                _toReturn = _possibleEnemyShooter;
+                break;
+            }
+        }
+
+        if (_toReturn == null)
+        {
+            _toReturn = Instantiate(enemyShooterPrefab);
+            _toReturn.transform.SetParent(_enemyShooterHolder.transform);
+            listEnemyShooterPool.Add(_toReturn);
+        }
+
+        _toReturn.gameObject.SetActive(true);
+
+        return _toReturn;
+    }
+
+    public ChaserEnemy TryToGetEnemyChaser()
+    {
+        ChaserEnemy _toReturn = null;
+
+        for (int index = 0; index < listEnemyChaserPool.Count; index++)
+        {
+            ChaserEnemy _possibleEnemyChaser = listEnemyChaserPool[index];
+            if (!_possibleEnemyChaser.gameObject.activeSelf)
+            {
+                _toReturn = _possibleEnemyChaser;
+                break;
+            }
+        }
+
+        if (_toReturn == null)
+        {
+            _toReturn = Instantiate(enemyChaserPrefab);
+            _toReturn.transform.SetParent(_enemyChaserHolder.transform);
+            listEnemyChaserPool.Add(_toReturn);
         }
 
         _toReturn.gameObject.SetActive(true);
