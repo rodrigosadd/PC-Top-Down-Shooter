@@ -81,16 +81,20 @@ public abstract class Ship : MonoBehaviour
         {
             colliderShip.enabled = false;
             state = ShipState.DISABLED;
-
-            if (GameInstances.GetPlayer().state != ShipState.DISABLED)
-            {
-                GameInstances.GetPlayer().amountPoints += amountPoints;
-            }
+            SetScorePoints();
         }
         else if (state == ShipState.DISABLED)
         {
             DestroySpriteRender();
             StartCoroutine(DisableShip());
+        }
+    }
+
+    public void SetScorePoints()
+    {
+        if (GameInstances.GetPlayer().state != ShipState.DISABLED)
+        {
+            GameInstances.GetPlayer().amountPoints += amountPoints;
         }
     }
 

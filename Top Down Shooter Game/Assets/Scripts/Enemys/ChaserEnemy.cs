@@ -17,6 +17,7 @@ public class ChaserEnemy : EnemyShip
     {
         SetShipGraphics();
         Dead();
+        DisableFindingPlayer();
     }
 
     void FixedUpdate()

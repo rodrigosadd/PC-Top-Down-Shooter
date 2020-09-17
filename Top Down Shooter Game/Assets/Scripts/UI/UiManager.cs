@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class UiManager : MonoBehaviour
@@ -13,10 +13,14 @@ public class UiManager : MonoBehaviour
     public Vector2 offset;
 
     [Header("Score points variables")]
-    public TextMeshProUGUI scorePointsText;
+    public TMP_Text scorePointsText;
 
     [Header("Wave countdown variables")]
     public GameObject spawnerCountdown;
+
+    [Header("End of session variables")]
+    public GameObject endOfSession;
+    public TMP_Text endScorePointsText;
 
     void Update()
     {
@@ -105,5 +109,20 @@ public class UiManager : MonoBehaviour
     public void SetScorePoints()
     {
         scorePointsText.text = GameInstances.GetPlayer().amountPoints.ToString();
+    }
+
+    public void PlayAgain()
+    {
+        Time.timeScale = 1;
+        GameInstances.instance.spawnerInstance.gamePlayeTime = 0;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        endOfSession.gameObject.SetActive(false);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        Time.timeScale = 1;
+        GameInstances.instance.spawnerInstance.gamePlayeTime = 0;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }

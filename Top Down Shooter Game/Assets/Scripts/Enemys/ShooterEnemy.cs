@@ -27,11 +27,12 @@ public class ShooterEnemy : EnemyShip
         Dead();
         EnemyShooting();
         DistanceBetweenPlayer();
+        DisableFindingPlayer();
     }
 
     public void DistanceBetweenPlayer()
     {
-        if (aiPath.reachedDestination)
+        if (aiPath.reachedDestination && state != ShipState.DISABLED)
         {
             _lookAtdirection = GameInstances.GetPlayer().transform.position - transform.position;
             transform.rotation = Quaternion.LookRotation(Vector3.forward, _lookAtdirection);

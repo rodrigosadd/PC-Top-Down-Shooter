@@ -9,6 +9,14 @@ public class EnemyShip : Ship
     public AIPath aiPath;
     public AIDestinationSetter aiDestination;
 
+    public void DisableFindingPlayer()
+    {
+        if (state == ShipState.DISABLED)
+        {
+            aiDestination.enabled = false;
+        }
+    }
+
     public void TargetAINull()
     {
         if (aiDestination.target == null)

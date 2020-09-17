@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
-public class MainMenu : MonoBehaviour
+public class MenuController : MonoBehaviour
 {
-    public void PlayGame()
+    public TMP_InputField sessionTimeInputField;
+    public TMP_InputField spawnTimeInputField;
+    public Spawner spawner;
+
+    public void OnSessionTimeChange()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        spawner.gameMinutes = float.Parse(sessionTimeInputField.text);
     }
-    public void QuitGame()
+
+    public void OnSpawnTimeChange()
     {
-        Debug.Log("Quit!");
-        Application.Quit();
+        spawner.timeSpawnEnemy = float.Parse(spawnTimeInputField.text);
     }
 }

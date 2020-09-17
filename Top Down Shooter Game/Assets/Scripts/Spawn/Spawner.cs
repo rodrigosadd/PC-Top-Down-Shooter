@@ -8,8 +8,8 @@ public class Spawner : MonoBehaviour
     public Transform[] spawnPoints;
     public float gameMinutes;
     public float timeSpawnEnemy;
+    public float gamePlayeTime;
 
-    private float _gamePlayeTime;
     private bool _canSpawn = true;
     private bool _startGame = false;
     private bool _startedSpawner = false;
@@ -37,6 +37,7 @@ public class Spawner : MonoBehaviour
 
     public void StartSpawn()
     {
+        GameInstances.instance.spawnerInstance.gamePlayeTime = 0;
         StartCoroutine(CountdownToStart());
         _startedSpawner = true;
     }
@@ -51,17 +52,18 @@ public class Spawner : MonoBehaviour
 
     public void Timer()
     {
-        _gamePlayeTime += 1 * Time.deltaTime;
+        gamePlayeTime += 1 * Time.deltaTime;
     }
 
     public void CheckGameState()
     {
-        if (_gamePlayeTime < 60 * gameMinutes && _canSpawn)
+        if (gamePlayeTime < 60 * gameMinutes && _canSpawn)
         {
             StartCoroutine(SpawnEnemies());
         }
-        else if (_gamePlayeTime >= 60 * gameMinutes)
+        else if (gamePlayeTime >= 60 * gameMinutes)
         {
+            gamePlayeTime = 0;
             EndGame();
         }
     }
@@ -83,6 +85,7 @@ public class Spawner : MonoBehaviour
         ShooterEnemy _shooterEnemy = GameInstances.instance.poolSystemInstance.TryToGetEnemyShooter();
         _shooterEnemy.transform.position = spawnPoints[_randomIndex].position;
         _shooterEnemy.colliderShip.enabled = true;
+        _shooterEnemy.aiDestination.enabled = true;
         GameInstances.instance.listShooterEnemies.Add(_shooterEnemy);
     }
 
@@ -92,11 +95,14 @@ public class Spawner : MonoBehaviour
         ChaserEnemy _chaserEnemy = GameInstances.instance.poolSystemInstance.TryToGetEnemyChaser();
         _chaserEnemy.transform.position = spawnPoints[_randomIndex].position;
         _chaserEnemy.colliderShip.enabled = true;
+        _chaserEnemy.aiDestination.enabled = true;
         GameInstances.instance.listChaserEnemies.Add(_chaserEnemy);
     }
 
     public void EndGame()
     {
+        GameInstances.instance.uiManagerInstance.endScorePointsText.text = GameInstances.GetPlayer().amountPoints.ToString();
+        GameInstances.instance.uiManagerInstance.endOfSession.gameObject.SetActive(true);
         Time.timeScale = 0;
         Debug.Log("Game finish!");
     }
