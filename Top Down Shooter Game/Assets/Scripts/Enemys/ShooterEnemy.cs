@@ -12,24 +12,30 @@ public class ShooterEnemy : EnemyShip
     public float distanceToShoot;
 
     private float _distanceBetween;
+    private Vector2 _lookAtdirection;
 
     void OnEnable()
     {
         state = ShipState.NORMAL;
         SetMaxLife();
+        TargetAINull();
     }
 
     void Update()
     {
         SetShipGraphics();
         Dead();
-        EnemyFollowPLayer();
         EnemyShooting();
+        DistanceBetweenPlayer();
     }
 
-    void FixedUpdate()
+    public void DistanceBetweenPlayer()
     {
-        LookAtPlayer();
+        if (aiPath.reachedDestination)
+        {
+            _lookAtdirection = GameInstances.GetPlayer().transform.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, _lookAtdirection);
+        }
     }
 
     public void EnemyShooting()

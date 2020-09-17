@@ -10,18 +10,17 @@ public class ChaserEnemy : EnemyShip
     {
         state = ShipState.NORMAL;
         SetMaxLife();
+        TargetAINull();
     }
 
     void Update()
     {
         SetShipGraphics();
         Dead();
-        EnemyFollowPLayer();
     }
 
     void FixedUpdate()
     {
-        LookAtPlayer();
         EnemyHitsPlayer();
     }
 
@@ -29,7 +28,7 @@ public class ChaserEnemy : EnemyShip
     {
         _distanceBetween = Vector2.Distance(transform.position, GameInstances.GetPlayer().transform.position);
 
-        if (_distanceBetween <= stoppingDistance && state != ShipState.DISABLED && GameInstances.GetPlayer().state != ShipState.DISABLED)
+        if (_distanceBetween <= 0.5 && state != ShipState.DISABLED && GameInstances.GetPlayer().state != ShipState.DISABLED)
         {
             GameInstances.GetPlayer().TakeDamage(maxLife);
             TakeDamage(maxLife);

@@ -16,7 +16,7 @@ public class UiManager : MonoBehaviour
     public TextMeshProUGUI scorePointsText;
 
     [Header("Wave countdown variables")]
-    public GameObject waveCountdown;
+    public GameObject spawnerCountdown;
 
     void Update()
     {
@@ -47,7 +47,7 @@ public class UiManager : MonoBehaviour
 
         for (int i = 0; i < GameInstances.instance.listShooterEnemies.Count; i++)
         {
-            EnemyShip enemyIndex = GameInstances.instance.listShooterEnemies[i];
+            ShooterEnemy enemyIndex = GameInstances.instance.listShooterEnemies[i];
             if (!HasLifeBar(enemyIndex))
             {
                 LifeBarInfo _lifeBar = GameInstances.instance.poolSystemInstance.TryToGetLifeBar();
@@ -58,7 +58,7 @@ public class UiManager : MonoBehaviour
 
         for (int i = 0; i < GameInstances.instance.listChaserEnemies.Count; i++)
         {
-            EnemyShip enemyIndex = GameInstances.instance.listChaserEnemies[i];
+            ChaserEnemy enemyIndex = GameInstances.instance.listChaserEnemies[i];
             if (!HasLifeBar(enemyIndex))
             {
                 LifeBarInfo _lifeBar = GameInstances.instance.poolSystemInstance.TryToGetLifeBar();

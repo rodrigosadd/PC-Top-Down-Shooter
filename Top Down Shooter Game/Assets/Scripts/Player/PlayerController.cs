@@ -13,6 +13,11 @@ public class PlayerController : Ship
     public float timeBtwShots;
     public float startTimeBtwShots;
 
+    [Header("Movement variables")]
+    public float currentSpeed;
+    public float maxSpeed;
+    public float acceleration;
+
     private Vector2 _mousePosition;
     private Vector2 _lookAtdirection;
     private Vector2 _moveDirection;
