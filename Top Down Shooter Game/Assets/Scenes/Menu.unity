@@ -8085,10 +8085,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 547fde06dde02ed44ac65d4e26ebab05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMinutes: 0.5
+  gameMinutes: 1
   timeSpawnEnemy: 4
   gamePlayTime: 0
   currentCountdown: 0
+  gameFinish: 0
 --- !u!4 &1728188313
 Transform:
   m_ObjectHideFlags: 0

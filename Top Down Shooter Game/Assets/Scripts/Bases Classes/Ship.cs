@@ -10,13 +10,13 @@ public abstract class Ship : MonoBehaviour
 
     [Header("Life variables")]
     public GameObject[] shipGraphics;
-    public SpriteRenderer[] destroyedSpriteRender;
+    public SpriteRenderer[] disableSpriteRender;
     public int currentLife;
     public int maxLife;
 
     [Header("Bullet variables")]
     public GameObject impactEffect;
-    public int damage;
+    public int maxDamageReceived;
 
     [Header("Point variable")]
     public int amountPoints;
@@ -43,9 +43,9 @@ public abstract class Ship : MonoBehaviour
     {
         if (currentLife > 60)
         {
-            for (int i = 0; i < destroyedSpriteRender.Length; i++)
+            for (int i = 0; i < disableSpriteRender.Length; i++)
             {
-                destroyedSpriteRender[i].color = Color.white;
+                disableSpriteRender[i].color = Color.white;
             }
 
             shipGraphics[0].gameObject.SetActive(true);
@@ -86,7 +86,7 @@ public abstract class Ship : MonoBehaviour
         }
         else if (state == ShipState.DISABLED)
         {
-            DestroySpriteRender();
+            DisableSpriteRender();
             DisableShip();
         }
     }
@@ -112,13 +112,13 @@ public abstract class Ship : MonoBehaviour
         }
     }
 
-    public void DestroySpriteRender()
+    public void DisableSpriteRender()
     {
-        for (int i = 0; i < destroyedSpriteRender.Length; i++)
+        for (int i = 0; i < disableSpriteRender.Length; i++)
         {
-            Color _colorRender = destroyedSpriteRender[i].color;
+            Color _colorRender = disableSpriteRender[i].color;
             _colorRender.a -= 0.5f * Time.deltaTime;
-            destroyedSpriteRender[i].color = _colorRender;
+            disableSpriteRender[i].color = _colorRender;
         }
     }
 
@@ -126,7 +126,7 @@ public abstract class Ship : MonoBehaviour
     {
         if (hitInfo.transform.tag == "Bullet")
         {
-            TakeDamage(damage);
+            TakeDamage(maxDamageReceived);
             hitInfo.gameObject.SetActive(false);
             _bulletImpact = GameInstances.instance.poolSystemInstance.TryToGetBulletImpact();
             _bulletImpact.transform.position = hitInfo.transform.position;

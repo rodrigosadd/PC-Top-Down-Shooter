@@ -15632,16 +15632,16 @@ MonoBehaviour:
   - {fileID: 1379405359}
   - {fileID: 41671492}
   - {fileID: 746639048}
-  destroyedSpriteRender:
+  disableSpriteRender:
+  - {fileID: 514740305}
+  - {fileID: 1379405361}
+  - {fileID: 41671494}
   - {fileID: 746639050}
-  - {fileID: 654878539}
-  - {fileID: 946029081}
-  - {fileID: 1006022728}
   currentLife: 0
   maxLife: 100
   impactEffect: {fileID: 8329977024021135012, guid: ae0a4ef13436c5245b75a9fad854fce0,
     type: 3}
-  damage: 20
+  maxDamageReceived: 20
   amountPoints: 0
   rBodyPlayer: {fileID: 550539772}
   shotPoints:
