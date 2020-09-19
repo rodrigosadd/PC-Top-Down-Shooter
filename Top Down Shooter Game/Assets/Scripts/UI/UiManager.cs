@@ -24,6 +24,11 @@ public class UiManager : MonoBehaviour
     public TMP_Text stopWatchText;
     public float currentGameTime = 0;
 
+    void Start()
+    {
+        Spawner.spawnerInstance.gameFinish = false;
+    }
+
     void Update()
     {
         AddLifeBar();
@@ -113,7 +118,7 @@ public class UiManager : MonoBehaviour
     {
         scorePointsText.text = GameInstances.GetPlayer().amountPoints.ToString();
 
-        if (GameInstances.GetPlayer().state == ShipState.DISABLED)
+        if (GameInstances.GetPlayer().state == ShipState.DISABLED || Spawner.spawnerInstance.gameFinish == true)
         {
             endScorePointsText.text = GameInstances.GetPlayer().amountPoints.ToString();
         }
@@ -121,12 +126,14 @@ public class UiManager : MonoBehaviour
 
     public void PlayAgain()
     {
+        Spawner.spawnerInstance.gameFinish = false;
         Spawner.spawnerInstance.currentCountdown = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ReturnToMainMenu()
     {
+        Spawner.spawnerInstance.gameFinish = false;
         Spawner.spawnerInstance.currentCountdown = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }

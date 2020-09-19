@@ -8088,6 +8088,7 @@ MonoBehaviour:
   gameMinutes: 0.5
   timeSpawnEnemy: 4
   gamePlayTime: 0
+  currentCountdown: 0
 --- !u!4 &1728188313
 Transform:
   m_ObjectHideFlags: 0

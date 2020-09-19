@@ -47,7 +47,7 @@ public class ShooterEnemy : EnemyShip
     {
         _distanceBetween = Vector2.Distance(transform.position, GameInstances.GetPlayer().transform.position);
 
-        if (_distanceBetween < distanceToShoot && state != ShipState.DISABLED && GameInstances.GetPlayer().state != ShipState.DISABLED)
+        if (_distanceBetween < distanceToShoot && state != ShipState.DISABLED && GameInstances.GetPlayer().state != ShipState.DISABLED && Spawner.spawnerInstance.gameFinish == false)
         {
             if (timeBtwShots <= 0)
             {

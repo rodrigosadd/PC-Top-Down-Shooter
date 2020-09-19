@@ -5,15 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class Spawner : MonoBehaviour
 {
+    public static Spawner spawnerInstance;
     public float gameMinutes;
     public float timeSpawnEnemy;
     public float gamePlayTime;
     public float currentCountdown;
-    public static Spawner spawnerInstance;
+    public bool gameFinish = false;
 
     private static bool _startApplication = false;
     private float _currentTimeToSpawnEnemy;
-    private bool _CanSpawn = false;
+    private bool _canSpawn = false;
 
     void Start()
     {
@@ -30,7 +31,7 @@ public class Spawner : MonoBehaviour
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "Game")
+        if (SceneManager.GetActiveScene().name == "Game" && !gameFinish)
         {
             CountdownToStart();
             SpawnEnemies();
@@ -51,12 +52,9 @@ public class Spawner : MonoBehaviour
         }
         else
         {
-            _CanSpawn = true;
+            _canSpawn = true;
         }
-        if (SceneManager.GetActiveScene().name == "Game")
-        {
-            GameInstances.instance.uiManagerInstance.spawnerCountdown.gameObject.SetActive(true);
-        }
+        GameInstances.instance.uiManagerInstance.spawnerCountdown.gameObject.SetActive(true);
     }
 
     public void CheckEndGame()
@@ -76,7 +74,7 @@ public class Spawner : MonoBehaviour
 
     public void SpawnEnemies()
     {
-        if (_CanSpawn)
+        if (_canSpawn)
         {
             if (_currentTimeToSpawnEnemy < 1)
             {
@@ -93,10 +91,11 @@ public class Spawner : MonoBehaviour
 
     public void EndGame()
     {
-        _CanSpawn = false;
+        _canSpawn = false;
         gamePlayTime = 0;
         GameInstances.instance.uiManagerInstance.spawnerCountdown.gameObject.SetActive(false);
         GameInstances.instance.uiManagerInstance.endOfSession.gameObject.SetActive(true);
+        gameFinish = true;
     }
 
     public void SpawnEnemyShooter()
@@ -106,6 +105,8 @@ public class Spawner : MonoBehaviour
         _shooterEnemy.transform.position = GameInstances.instance.spawnPoints[_randomIndex].position;
         _shooterEnemy.colliderShip.enabled = true;
         _shooterEnemy.aiDestination.enabled = true;
+        _shooterEnemy.aiDestination.enabled = true;
+        _shooterEnemy.aiPath.enabled = true;
         GameInstances.instance.listShooterEnemies.Add(_shooterEnemy);
     }
 
@@ -116,6 +117,8 @@ public class Spawner : MonoBehaviour
         _chaserEnemy.transform.position = GameInstances.instance.spawnPoints[_randomIndex].position;
         _chaserEnemy.colliderShip.enabled = true;
         _chaserEnemy.aiDestination.enabled = true;
+        _chaserEnemy.aiDestination.enabled = true;
+        _chaserEnemy.aiPath.enabled = true;
         GameInstances.instance.listChaserEnemies.Add(_chaserEnemy);
     }
 }

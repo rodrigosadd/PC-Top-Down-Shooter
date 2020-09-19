@@ -31,11 +31,14 @@ public class PlayerController : Ship
 
     void Update()
     {
-        SetShipGraphics();
-        Dead();
-        InputMovement();
-        Shooting();
-        LookAtMouse();
+        if (Spawner.spawnerInstance.gameFinish == false)
+        {
+            SetShipGraphics();
+            Dead();
+            InputMovement();
+            Shooting();
+            LookAtMouse();
+        }
     }
 
     public void SetMousePosition()
