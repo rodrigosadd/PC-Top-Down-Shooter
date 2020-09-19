@@ -12,11 +12,21 @@ public class MenuController : MonoBehaviour
 
     public void OnSessionTimeChange()
     {
+        if (string.IsNullOrEmpty(sessionTimeInputField.text))
+        {
+            sessionTimeInputField.text = 0.ToString();
+            return;
+        }
         spawner.gameMinutes = float.Parse(sessionTimeInputField.text);
     }
 
     public void OnSpawnTimeChange()
     {
+        if (string.IsNullOrEmpty(spawnTimeInputField.text))
+        {
+            spawnTimeInputField.text = 0.ToString();
+            return;
+        }
         spawner.timeSpawnEnemy = float.Parse(spawnTimeInputField.text);
     }
 }

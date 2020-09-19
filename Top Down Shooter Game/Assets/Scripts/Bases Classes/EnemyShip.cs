@@ -11,9 +11,10 @@ public class EnemyShip : Ship
 
     public void DisableFindingPlayer()
     {
-        if (state == ShipState.DISABLED)
+        if (state == ShipState.DISABLED || GameInstances.GetPlayer().state == ShipState.DISABLED)
         {
             aiDestination.enabled = false;
+            aiPath.enabled = false;
         }
     }
 

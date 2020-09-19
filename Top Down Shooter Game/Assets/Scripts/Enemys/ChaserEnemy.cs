@@ -15,9 +15,13 @@ public class ChaserEnemy : EnemyShip
 
     void Update()
     {
+        DisableFindingPlayer();
+        if (GameInstances.GetPlayer().state == ShipState.DISABLED)
+        {
+            return;
+        }
         SetShipGraphics();
         Dead();
-        DisableFindingPlayer();
     }
 
     void FixedUpdate()

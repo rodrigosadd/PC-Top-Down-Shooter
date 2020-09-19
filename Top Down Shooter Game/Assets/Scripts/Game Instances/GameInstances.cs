@@ -13,12 +13,10 @@ public class GameInstances : MonoBehaviour
     [Header("UI Manager Instance")]
     public UiManager uiManagerInstance;
 
-    [Header("UI Manager Instance")]
-    public Spawner spawnerInstance;
-
     [Header("Enemys Instances")]
     public List<ShooterEnemy> listShooterEnemies;
     public List<ChaserEnemy> listChaserEnemies;
+    public Transform[] spawnPoints;
 
     public static GameInstances instance;
 

@@ -21,6 +21,8 @@ public class UiManager : MonoBehaviour
     [Header("End of session variables")]
     public GameObject endOfSession;
     public TMP_Text endScorePointsText;
+    public TMP_Text stopWatchText;
+    public float currentGameTime = 0;
 
     void Update()
     {
@@ -29,6 +31,7 @@ public class UiManager : MonoBehaviour
         SetLifeBarPosition();
         DisableLifeBar();
         SetScorePoints();
+        stopWatch();
     }
 
     public void SetLife()
@@ -109,20 +112,27 @@ public class UiManager : MonoBehaviour
     public void SetScorePoints()
     {
         scorePointsText.text = GameInstances.GetPlayer().amountPoints.ToString();
+
+        if (GameInstances.GetPlayer().state == ShipState.DISABLED)
+        {
+            endScorePointsText.text = GameInstances.GetPlayer().amountPoints.ToString();
+        }
     }
 
     public void PlayAgain()
     {
-        Time.timeScale = 1;
-        GameInstances.instance.spawnerInstance.gamePlayeTime = 0;
+        Spawner.spawnerInstance.currentCountdown = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        endOfSession.gameObject.SetActive(false);
     }
 
     public void ReturnToMainMenu()
     {
-        Time.timeScale = 1;
-        GameInstances.instance.spawnerInstance.gamePlayeTime = 0;
+        Spawner.spawnerInstance.currentCountdown = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+
+    public void stopWatch()
+    {
+        stopWatchText.text = Spawner.spawnerInstance.gamePlayTime.ToString("00.0");
     }
 }

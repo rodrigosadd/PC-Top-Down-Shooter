@@ -22,6 +22,7 @@ public abstract class Ship : MonoBehaviour
     public int amountPoints;
 
     private GameObject _bulletImpact;
+    private float _currentDisableTime;
 
     public void TakeDamage(int amountDamege)
     {
@@ -86,7 +87,7 @@ public abstract class Ship : MonoBehaviour
         else if (state == ShipState.DISABLED)
         {
             DestroySpriteRender();
-            StartCoroutine(DisableShip());
+            DisableShip();
         }
     }
 
@@ -98,10 +99,17 @@ public abstract class Ship : MonoBehaviour
         }
     }
 
-    public IEnumerator DisableShip()
+    public void DisableShip()
     {
-        yield return new WaitForSeconds(2f);
-        gameObject.SetActive(false);
+        if (_currentDisableTime < 1)
+        {
+            _currentDisableTime += Time.deltaTime / 2f;
+        }
+        else
+        {
+            _currentDisableTime = 0;
+            gameObject.SetActive(false);
+        }
     }
 
     public void DestroySpriteRender()

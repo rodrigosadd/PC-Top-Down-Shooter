@@ -23,11 +23,15 @@ public class ShooterEnemy : EnemyShip
 
     void Update()
     {
+        DisableFindingPlayer();
+        if (GameInstances.GetPlayer().state == ShipState.DISABLED)
+        {
+            return;
+        }
         SetShipGraphics();
         Dead();
         EnemyShooting();
         DistanceBetweenPlayer();
-        DisableFindingPlayer();
     }
 
     public void DistanceBetweenPlayer()

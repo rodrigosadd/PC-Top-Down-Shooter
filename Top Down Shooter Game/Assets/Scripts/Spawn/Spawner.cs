@@ -5,85 +5,105 @@ using UnityEngine.SceneManagement;
 
 public class Spawner : MonoBehaviour
 {
-    public Transform[] spawnPoints;
     public float gameMinutes;
     public float timeSpawnEnemy;
-    public float gamePlayeTime;
+    public float gamePlayTime;
+    public float currentCountdown;
+    public static Spawner spawnerInstance;
 
-    private bool _canSpawn = true;
-    private bool _startGame = false;
-    private bool _startedSpawner = false;
+    private static bool _startApplication = false;
+    private float _currentTimeToSpawnEnemy;
+    private bool _CanSpawn = false;
 
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        if (!_startApplication)
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+        if (spawnerInstance == null)
+        {
+            spawnerInstance = this;
+        }
+        _startApplication = true;
     }
-
 
     void Update()
     {
-        if (_startGame)
+        if (SceneManager.GetActiveScene().name == "Game")
         {
-            Timer();
-            CheckGameState();
-            GameInstances.instance.CheckEnemiesDisabled();
-        }
-
-        if (!_startedSpawner && SceneManager.GetActiveScene().name == "Game")
-        {
-            StartSpawn();
+            CountdownToStart();
+            SpawnEnemies();
+            CheckEndGame();
         }
     }
 
-    public void StartSpawn()
+    public void GamePlayTime()
     {
-        GameInstances.instance.spawnerInstance.gamePlayeTime = 0;
-        StartCoroutine(CountdownToStart());
-        _startedSpawner = true;
+        gamePlayTime += Time.deltaTime * 1;
     }
 
-    public IEnumerator CountdownToStart()
+    public void CountdownToStart()
     {
-        GameInstances.instance.uiManagerInstance.spawnerCountdown.SetActive(true);
-        yield return new WaitForSeconds(4.5f);
-        GameInstances.instance.uiManagerInstance.spawnerCountdown.SetActive(false);
-        _startGame = true;
-    }
-
-    public void Timer()
-    {
-        gamePlayeTime += 1 * Time.deltaTime;
-    }
-
-    public void CheckGameState()
-    {
-        if (gamePlayeTime < 60 * gameMinutes && _canSpawn)
+        if (currentCountdown < 1)
         {
-            StartCoroutine(SpawnEnemies());
+            currentCountdown += Time.deltaTime / 4.5f;
         }
-        else if (gamePlayeTime >= 60 * gameMinutes)
+        else
         {
-            gamePlayeTime = 0;
+            _CanSpawn = true;
+        }
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            GameInstances.instance.uiManagerInstance.spawnerCountdown.gameObject.SetActive(true);
+        }
+    }
+
+    public void CheckEndGame()
+    {
+        if (gamePlayTime >= gameMinutes * 60 || GameInstances.GetPlayer().state == ShipState.DISABLED)
+        {
             EndGame();
         }
+        else
+        {
+            if (currentCountdown >= 1 && GameInstances.GetPlayer().state != ShipState.DISABLED)
+            {
+                GamePlayTime();
+            }
+        }
     }
 
-    public IEnumerator SpawnEnemies()
+    public void SpawnEnemies()
     {
-        _canSpawn = false;
+        if (_CanSpawn)
+        {
+            if (_currentTimeToSpawnEnemy < 1)
+            {
+                _currentTimeToSpawnEnemy += Time.deltaTime / timeSpawnEnemy;
+            }
+            else
+            {
+                _currentTimeToSpawnEnemy = 0;
+                SpawnEnemyShooter();
+                SpawnEnemyChaser();
+            }
+        }
+    }
 
-        SpawnEnemyShooter();
-        SpawnEnemyChaser();
-
-        yield return new WaitForSeconds(timeSpawnEnemy);
-        _canSpawn = true;
+    public void EndGame()
+    {
+        _CanSpawn = false;
+        gamePlayTime = 0;
+        GameInstances.instance.uiManagerInstance.spawnerCountdown.gameObject.SetActive(false);
+        GameInstances.instance.uiManagerInstance.endOfSession.gameObject.SetActive(true);
     }
 
     public void SpawnEnemyShooter()
     {
-        int _randomIndex = Random.Range(0, spawnPoints.Length);
+        int _randomIndex = Random.Range(0, GameInstances.instance.spawnPoints.Length);
         ShooterEnemy _shooterEnemy = GameInstances.instance.poolSystemInstance.TryToGetEnemyShooter();
-        _shooterEnemy.transform.position = spawnPoints[_randomIndex].position;
+        _shooterEnemy.transform.position = GameInstances.instance.spawnPoints[_randomIndex].position;
         _shooterEnemy.colliderShip.enabled = true;
         _shooterEnemy.aiDestination.enabled = true;
         GameInstances.instance.listShooterEnemies.Add(_shooterEnemy);
@@ -91,19 +111,11 @@ public class Spawner : MonoBehaviour
 
     public void SpawnEnemyChaser()
     {
-        int _randomIndex = Random.Range(0, spawnPoints.Length);
+        int _randomIndex = Random.Range(0, GameInstances.instance.spawnPoints.Length);
         ChaserEnemy _chaserEnemy = GameInstances.instance.poolSystemInstance.TryToGetEnemyChaser();
-        _chaserEnemy.transform.position = spawnPoints[_randomIndex].position;
+        _chaserEnemy.transform.position = GameInstances.instance.spawnPoints[_randomIndex].position;
         _chaserEnemy.colliderShip.enabled = true;
         _chaserEnemy.aiDestination.enabled = true;
         GameInstances.instance.listChaserEnemies.Add(_chaserEnemy);
-    }
-
-    public void EndGame()
-    {
-        GameInstances.instance.uiManagerInstance.endScorePointsText.text = GameInstances.GetPlayer().amountPoints.ToString();
-        GameInstances.instance.uiManagerInstance.endOfSession.gameObject.SetActive(true);
-        Time.timeScale = 0;
-        Debug.Log("Game finish!");
     }
 }

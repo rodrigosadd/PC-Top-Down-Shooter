@@ -18,6 +18,7 @@ public class PlayerController : Ship
     public float maxSpeed;
     public float acceleration;
 
+    private bool _playerIsDead = false;
     private Vector2 _mousePosition;
     private Vector2 _lookAtdirection;
     private Vector2 _moveDirection;
